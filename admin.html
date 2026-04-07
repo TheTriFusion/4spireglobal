@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Approval Panel | 4Spire Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-indigo-900 border-b border-indigo-800 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2 text-white">
+                    <img src="images/logo.png" alt="Logo" class="h-8 invert">
+                    <span class="font-bold text-xl tracking-tight">Admin Approval Hub</span>
+                </div>
+                <div class="flex items-center gap-6">
+                    <a href="marketplace.html" class="text-indigo-100 hover:text-white transition font-medium text-sm px-4 py-2 border border-indigo-700 rounded-lg hover:bg-indigo-800">Shop View</a>
+                    <button onclick="logout()" class="text-red-200 hover:text-red-500 font-medium transition text-sm">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 py-12">
+        <div class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900" id="admin-title">Pending Review</h1>
+                <div class="flex gap-4 mt-4">
+                    <button onclick="changeView('pending')" class="text-sm font-bold text-indigo-600 bg-indigo-50 px-4 py-2 rounded-lg" id="btn-pending">Pending</button>
+                    <button onclick="changeView('all')" class="text-sm font-bold text-gray-500 hover:text-indigo-600 px-4 py-2 rounded-lg" id="btn-all">All Templates</button>
+                    <button onclick="changeView('users')" class="text-sm font-bold text-gray-500 hover:text-indigo-600 px-4 py-2 rounded-lg" id="btn-users">Registered Users</button>
+                </div>
+            </div>
+            <div class="bg-white px-6 py-4 rounded-xl border border-gray-100 shadow-sm flex items-center gap-6">
+                <div class="text-center">
+                    <div id="pending-count" class="text-2xl font-bold text-amber-600">0</div>
+                    <div class="text-xs text-gray-400 font-semibold uppercase tracking-wider">Pending</div>
+                </div>
+                <div class="h-10 w-px bg-gray-100"></div>
+                <div class="text-center">
+                    <div id="user-count" class="text-2xl font-bold text-indigo-600">0</div>
+                    <div class="text-xs text-gray-400 font-semibold uppercase tracking-wider">Total Users</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
+            <div class="overflow-x-auto" id="table-container">
+                <table class="w-full">
+                    <thead class="bg-gray-50/50 border-b border-gray-100" id="table-head">
+                        <!-- Dynamic Head -->
+                    </thead>
+                    <tbody id="data-list" class="divide-y divide-gray-50">
+                        <!-- Dynamic Rows -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="empty-state" class="hidden py-24 text-center">
+                <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-300">
+                    <i data-lucide="check-circle" class="w-10 h-10"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">No Items Found</h3>
+                <p class="text-gray-400" id="empty-text">Sit back and relax!</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        if (!token || user.role !== 'admin') {
+            window.location.href = 'login.html';
+        }
+
+        let currentView = 'pending';
+
+        function changeView(view) {
+            currentView = view;
+            const titles = {
+                'pending': 'Pending Review',
+                'all': 'All Templates',
+                'users': 'Registered Users'
+            };
+            document.getElementById('admin-title').innerText = titles[view];
+            
+            ['pending', 'all', 'users'].forEach(v => {
+                const btn = document.getElementById(`btn-${v}`);
+                if (v === view) {
+                    btn.className = 'text-sm font-bold text-indigo-600 bg-indigo-50 px-4 py-2 rounded-lg';
+                } else {
+                    btn.className = 'text-sm font-bold text-gray-500 hover:text-indigo-600 px-4 py-2 rounded-lg';
+                }
+            });
+
+            if (view === 'users') {
+                fetchUsers();
+            } else {
+                fetchTemplates();
+            }
+        }
+
+        async function fetchTemplates() {
+            try {
+                const endpoint = currentView === 'pending' ? 'pending' : 'all';
+                const response = await fetch(`http://localhost:5000/api/templates/admin/${endpoint}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const templates = await response.json();
+                renderTemplates(templates);
+            } catch (err) { console.error(err); }
+        }
+
+        async function fetchUsers() {
+            try {
+                const response = await fetch(`http://localhost:5000/api/auth/users`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const users = await response.json();
+                renderUsers(users);
+                document.getElementById('user-count').textContent = users.length;
+            } catch (err) { console.error(err); }
+        }
+
+        function renderTemplates(templates) {
+            const head = document.getElementById('table-head');
+            const list = document.getElementById('data-list');
+            const emptyState = document.getElementById('empty-state');
+            
+            document.getElementById('pending-count').textContent = templates.filter(t => t.status === 'pending').length;
+
+            head.innerHTML = `
+                <tr>
+                    <th class="px-8 py-6 text-left text-xs font-bold text-gray-400 uppercase tracking-widest">Template Details</th>
+                    <th class="px-8 py-6 text-left text-xs font-bold text-gray-400 uppercase tracking-widest">Price</th>
+                    <th class="px-8 py-6 text-left text-xs font-bold text-gray-400 uppercase tracking-widest">Actions</th>
+                </tr>
+            `;
+
+            if (templates.length === 0) {
+                document.getElementById('table-container').classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                document.getElementById('table-container').classList.remove('hidden');
+                emptyState.classList.add('hidden');
+            }
+
+            list.innerHTML = templates.map(t => `
+                <tr class="hover:bg-gray-50/50 transition duration-200">
+                    <td class="px-8 py-8">
+                        <div class="flex items-center gap-6">
+                            <div class="h-20 w-32 relative bg-gray-100 rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                                <img src="${t.thumbnail.startsWith('http') ? t.thumbnail : 'http://localhost:5000/' + t.thumbnail}" class="h-full w-full object-cover">
+                                <div class="absolute inset-0 bg-black/5 flex items-center justify-center opacity-0 hover:opacity-100 transition">
+                                    <a href="http://localhost:5000/${t.file_url}" target="_blank" class="bg-white/90 p-2 rounded-lg text-gray-900 shadow-xl border border-white">
+                                        <i data-lucide="download" class="w-4 h-4"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900">${t.title}</h3>
+                                <p class="text-gray-400 text-sm mt-1">By User ID: ${t.user_id}</p>
+                                <div class="mt-3 flex items-center gap-2">
+                                    <span class="px-3 py-1 ${getStatusClass(t.status)} text-[10px] font-bold uppercase tracking-wider rounded-lg border border-opacity-20">${t.status}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-8 py-8">
+                        <span class="text-xl font-bold text-gray-800 tracking-tight">$${t.price}</span>
+                    </td>
+                    <td class="px-8 py-8">
+                        <div class="flex items-center gap-3">
+                            ${t.status === 'pending' ? `
+                                <button onclick="approveTemplate(${t.id})" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition">Approve</button>
+                                <button onclick="rejectTemplate(${t.id})" class="bg-white border text-gray-600 hover:bg-gray-50 px-4 py-2 rounded-xl text-xs font-bold transition">Reject</button>
+                            ` : ''}
+                            <button onclick="deleteTemplate(${t.id})" class="text-red-500 hover:text-red-700 p-2"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function renderUsers(users) {
+            const head = document.getElementById('table-head');
+            const list = document.getElementById('data-list');
+            const emptyState = document.getElementById('empty-state');
+
+            head.innerHTML = `
+                <tr>
+                    <th class="px-8 py-6 text-left text-xs font-bold text-gray-400 uppercase tracking-widest">User Info</th>
+                    <th class="px-8 py-6 text-left text-xs font-bold text-gray-400 uppercase tracking-widest">Role</th>
+                    <th class="px-8 py-6 text-left text-xs font-bold text-gray-400 uppercase tracking-widest">Uploads</th>
+                    <th class="px-8 py-6 text-left text-xs font-bold text-gray-400 uppercase tracking-widest">Joined On</th>
+                </tr>
+            `;
+
+            if (users.length === 0) {
+                document.getElementById('table-container').classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                document.getElementById('table-container').classList.remove('hidden');
+                emptyState.classList.add('hidden');
+            }
+
+            list.innerHTML = users.map(u => `
+                <tr class="hover:bg-gray-50/50 transition duration-200">
+                    <td class="px-8 py-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center font-bold">
+                                ${u.name[0].toUpperCase()}
+                            </div>
+                            <div>
+                                <div class="font-bold text-gray-900">${u.name}</div>
+                                <div class="text-sm text-gray-500">${u.email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-8 py-6">
+                        <span class="px-3 py-1 ${u.role === 'admin' ? 'bg-red-50 text-red-600' : 'bg-gray-100 text-gray-600'} text-xs font-bold uppercase rounded-lg">
+                            ${u.role}
+                        </span>
+                    </td>
+                    <td class="px-8 py-6 text-sm font-bold text-indigo-600">
+                        ${u.template_count || 0} Temps
+                    </td>
+                    <td class="px-8 py-6 text-sm text-gray-500">
+                        ${new Date(u.created_at).toLocaleDateString()}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function approveTemplate(id) {
+            await fetch(`http://localhost:5000/api/templates/admin/approve/${id}`, {
+                method: 'PATCH',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            fetchTemplates();
+        }
+
+        async function rejectTemplate(id) {
+            await fetch(`http://localhost:5000/api/templates/admin/reject/${id}`, {
+                method: 'PATCH',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            fetchTemplates();
+        }
+
+        async function deleteTemplate(id) {
+            if (confirm("Delete this template permanently?")) {
+                await fetch(`http://localhost:5000/api/templates/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                fetchTemplates();
+            }
+        }
+
+        function getStatusClass(status) {
+            switch(status) {
+                case 'approved': return 'bg-green-50 text-green-600 border-green-100';
+                case 'rejected': return 'bg-red-50 text-red-600 border-red-100';
+                default: return 'bg-amber-50 text-amber-600 border-amber-100';
+            }
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'marketplace.html';
+        }
+
+        // Initial Load
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchTemplates();
+            // Just to get initial user count
+            fetchUsers().then(() => changeView('pending'));
+        });
+    </script>
+</body>
+</html>

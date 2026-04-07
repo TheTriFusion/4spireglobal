@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- awesome fonts css-->
+    <link href="css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <!-- custom CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" type="image/x-icon" href="images/Fav Icon.png" />
+    <title>Policies | 4Spire Global</title>
+    <style>
+      /* ── Page header banner ── */
+      .policies-hero {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+        padding: 70px 40px 50px;
+        text-align: center;
+        color: #fff;
+      }
+      .policies-hero h1 {
+        font-size: 2.4rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      .policies-hero p {
+        color: rgba(255,255,255,0.7);
+        font-size: 1.05rem;
+        margin: 0;
+      }
+      .policies-hero span {
+        color: #f59e0b;
+      }
+
+      /* ── Tab bar ── */
+      .policy-tab-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 0;
+        padding: 0 0 0 0;
+      }
+      .policy-tab-btn {
+        padding: 11px 22px;
+        background: #e8e8e8;
+        color: #444;
+        border: none;
+        border-radius: 8px 8px 0 0;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.2s, color 0.2s;
+      }
+      .policy-tab-btn.active,
+      .policy-tab-btn:hover {
+        background: #f59e0b;
+        color: #fff;
+      }
+
+      /* ── Content panel ── */
+      .policy-panel {
+        display: none;
+        background: #fff;
+        border-radius: 0 8px 8px 8px;
+        padding: 40px 44px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      }
+      .policy-panel.active {
+        display: block;
+      }
+      .policy-panel h3 {
+        color: #1a1a2e;
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 3px solid #f59e0b;
+        display: inline-block;
+      }
+      .policy-panel h5 {
+        color: #1a1a2e;
+        margin-top: 24px;
+        font-size: 1.05rem;
+      }
+      .policy-panel p,
+      .policy-panel li {
+        color: #444;
+        line-height: 1.85;
+      }
+      .policy-panel ol,
+      .policy-panel ul {
+        padding-left: 22px;
+      }
+      .policy-panel ol li,
+      .policy-panel ul li {
+        margin-bottom: 10px;
+      }
+      .policy-panel a {
+        color: #f59e0b;
+        text-decoration: none;
+      }
+      .policy-panel a:hover {
+        text-decoration: underline;
+      }
+
+      /* ── Wrapper ── */
+      .policies-wrapper {
+        background: #f4f6f9;
+        padding: 50px 40px 70px;
+      }
+      .policies-inner {
+        max-width: 960px;
+        margin: 0 auto;
+      }
+
+      @media (max-width: 600px) {
+        .policy-tab-btn { font-size: 12px; padding: 9px 14px; }
+        .policy-panel { padding: 24px 18px; }
+        .policies-hero h1 { font-size: 1.6rem; }
+        .policies-wrapper { padding: 30px 16px 50px; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- ── Navbar (same as index) ── -->
+    <div class="navbar-container">
+      <div class="navbar-brand">
+        <a href="/"><img src="images/logo.png" alt="4Spire Global" /></a>
+      </div>
+      <button class="navbar-toggle" id="navbarToggle" aria-label="Toggle navigation">
+        <span class="navbar-toggle-icon"></span>
+      </button>
+      <div class="navbar navbar-expand-lg" id="navbarMenu">
+        <div class="navbar-nav">
+          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link" href="index.html#services">Services</a>
+          <a class="nav-link" href="index.html#about">About</a>
+          <a class="nav-link" href="index.html#contact">Contact</a>
+        </div>
+        <div class="contact">
+          <a class="navbar-brand" href="#contact">
+            <img src="images/phone.png" alt="" class="whatsapp-logo" />+91 87646 66727
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Hero banner ── -->
+    <div class="policies-hero">
+      <h1>Our <span>Policies</span></h1>
+      <p>Please read the following policies carefully before using our platform.</p>
+    </div>
+
+    <!-- ── Policies Section ── -->
+    <div class="policies-wrapper">
+      <div class="policies-inner">
+
+        <!-- Tab Buttons -->
+        <div class="policy-tab-bar">
+          <button class="policy-tab-btn active" onclick="showPolicy('terms')"   id="tab-terms">Terms &amp; Conditions</button>
+          <button class="policy-tab-btn"        onclick="showPolicy('privacy')" id="tab-privacy">Privacy Policy</button>
+          <button class="policy-tab-btn"        onclick="showPolicy('refund')"  id="tab-refund">Refund &amp; Cancellation</button>
+          <button class="policy-tab-btn"        onclick="showPolicy('return')"  id="tab-return">Return Policy</button>
+          <button class="policy-tab-btn"        onclick="showPolicy('shipping')" id="tab-shipping">Shipping Policy</button>
+        </div>
+
+        <!-- Terms & Conditions -->
+        <div id="policy-terms" class="policy-panel active">
+          <h3>Terms &amp; Conditions</h3>
+          <p>This document is an electronic record in terms of Information Technology Act, 2000 and rules thereunder as applicable and the amended provisions pertaining to electronic records in various statutes as amended by the Information Technology Act, 2000. This electronic record is generated by a computer system and does not require any physical or digital signatures.</p>
+          <p>This document is published in accordance with the provisions of Rule 3(1) of the Information Technology (Intermediaries guidelines) Rules, 2011 that require publishing the rules and regulations, privacy policy and Terms of Use for access or usage of domain name <a href="https://4spireglobal.in">https://4spireglobal.in</a> ('Website'), including the related mobile site and mobile application (hereinafter referred to as 'Platform').</p>
+          <p>The Platform is owned by 4Spire Global, a company incorporated under the Companies Act, 1956 with its registered office at 6-C-61, Chandra Shekhar Azad Nagar, Bhilwara - Rajasthan (hereinafter referred to as 'Platform Owner', 'we', 'us', 'our').</p>
+          <p>Your use of the Platform and services and tools are governed by the following terms and conditions ("Terms of Use") as applicable to the Platform including the applicable policies which are incorporated herein by way of reference. By mere use of the Platform, You shall be contracting with the Platform Owner and these terms and conditions including the policies constitute Your binding obligations with Platform Owner.</p>
+          <p><strong>ACCESSING, BROWSING OR OTHERWISE USING THE PLATFORM INDICATES YOUR AGREEMENT TO ALL THE TERMS AND CONDITIONS UNDER THESE TERMS OF USE, SO PLEASE READ THE TERMS OF USE CAREFULLY BEFORE PROCEEDING.</strong></p>
+          <h5>The use of the Platform and/or availing of our Services is subject to the following:</h5>
+          <ol>
+            <li>To access and use the Services, you agree to provide true, accurate and complete information to us during and after registration, and you shall be responsible for all acts done through the use of your registered account on the Platform.</li>
+            <li>Neither we nor any third parties provide any warranty or guarantee as to the accuracy, timeliness, performance, completeness or suitability of the information and materials offered on this website or through the Services, for any specific purpose.</li>
+            <li>Your use of our Services and the Platform is solely and entirely at your own risk and discretion for which we shall not be liable to you in any manner.</li>
+            <li>The contents of the Platform and the Services are proprietary to us and are licensed to us. You will not have any authority to claim any intellectual property rights, title, or interest in its contents.</li>
+            <li>You acknowledge that unauthorized use of the Platform and/or the Services may lead to action against you as per these Terms of Use and/or applicable laws.</li>
+            <li>You agree to pay us the charges associated with availing the Services.</li>
+            <li>You agree not to use the Platform and/or Services for any purpose that is unlawful, illegal or forbidden by these Terms, or Indian or local laws that might apply to you.</li>
+            <li>You agree and acknowledge that the website and the Services may contain links to other third party websites. On accessing these links, you will be governed by the terms of use, privacy policy and such other policies of such third party websites.</li>
+            <li>You understand that upon initiating a transaction for availing the Services you are entering into a legally binding and enforceable contract with the Platform Owner for the Services.</li>
+            <li>You shall indemnify and hold harmless Platform Owner, its affiliates, group companies and their respective officers, directors, agents, and employees, from any claim or demand made by any third party or penalty imposed due to or arising out of Your breach of this Terms of Use.</li>
+            <li>Notwithstanding anything contained in these Terms of Use, the parties shall not be liable for any failure to perform an obligation under these Terms if performance is prevented or delayed by a force majeure event.</li>
+            <li>These Terms and any dispute or claim relating to it, or its enforceability, shall be governed by and construed in accordance with the laws of India.</li>
+            <li>All disputes arising out of or in connection with these Terms shall be subject to the exclusive jurisdiction of the courts in India.</li>
+            <li>All concerns or communications relating to these Terms must be communicated to us using the contact information provided on this website.</li>
+          </ol>
+        </div>
+
+        <!-- Privacy Policy -->
+        <div id="policy-privacy" class="policy-panel">
+          <h3>Privacy Policy</h3>
+          <p>This Privacy Policy describes how 4Spire Global and its affiliates (collectively "4Spire Global, we, our, us") collect, use, share, protect or otherwise process your information/personal data through our website <a href="https://4spireglobal.in">https://4spireglobal.in</a> (hereinafter referred to as Platform). By visiting this Platform, providing your information or availing any product/service offered on the Platform, you expressly agree to be bound by the terms and conditions of this Privacy Policy.</p>
+          <h5>Collection</h5>
+          <p>We collect your personal data when you use our Platform, services or otherwise interact with us during the course of our relationship. This includes personal data provided during sign-up/registration such as name, date of birth, address, telephone/mobile number, email ID and/or any such information shared as proof of identity or address. Some sensitive personal data may be collected with your consent, such as bank account or credit/debit card information or biometric information.</p>
+          <h5>Usage</h5>
+          <p>We use personal data to provide the services you request. We use your personal data to assist sellers and business partners in handling and fulfilling orders; enhancing customer experience; to resolve disputes; troubleshoot problems; inform you about online and offline offers, products, services, and updates; customise your experience; detect and protect us against error, fraud and other criminal activity; enforce our terms and conditions.</p>
+          <h5>Sharing</h5>
+          <p>We may share your personal data internally within our group entities, our other corporate entities, and affiliates to provide you access to the services and products offered by them. We may disclose personal data to third parties such as sellers, business partners, third party service providers including logistics partners. We may also disclose personal data to government agencies or authorised law enforcement agencies if required to do so by law.</p>
+          <h5>Security Precautions</h5>
+          <p>To protect your personal data from unauthorised access or disclosure, loss or misuse we adopt reasonable security practices and procedures. However, the transmission of information is not completely secure for reasons beyond our control. Users are responsible for ensuring the protection of login and password records for their account.</p>
+          <h5>Data Deletion and Retention</h5>
+          <p>You have an option to delete your account by visiting your profile and settings on our Platform. We retain your personal data for a period no longer than is required for the purpose for which it was collected or as required under any applicable law.</p>
+          <h5>Your Rights</h5>
+          <p>You may access, rectify, and update your personal data directly through the functionalities provided on the Platform.</p>
+          <h5>Consent</h5>
+          <p>By visiting our Platform or by providing your information, you consent to the collection, use, storage, disclosure and otherwise processing of your information on the Platform in accordance with this Privacy Policy. You have an option to withdraw your consent by writing to the Grievance Officer at the contact information provided below with the subject line "Withdrawal of consent for processing personal data".</p>
+          <h5>Grievance Officer</h5>
+          <p>For privacy concerns, please contact us using the contact information provided on this website.<br>
+          <strong>Phone:</strong> Available Monday – Friday (9:00 – 18:00)</p>
+        </div>
+
+        <!-- Refund & Cancellation -->
+        <div id="policy-refund" class="policy-panel">
+          <h3>Refund &amp; Cancellation Policy</h3>
+          <p>This refund and cancellation policy outlines how you can cancel or seek a refund for a product/service that you have purchased through the Platform.</p>
+          <ol>
+            <li><strong>Cancellation Window:</strong> Cancellations will only be considered if the request is made within <strong>2 days</strong> of placing the order. However, cancellation requests may not be entertained if the orders have been communicated to the seller/merchant and they have initiated the process of shipping, or the product is out for delivery. In such an event, you may choose to reject the product at the doorstep.</li>
+            <li><strong>Perishable Items:</strong> 4Spire Global does not accept cancellation requests for perishable items like flowers, eatables, etc. However, a refund/replacement can be made if the user establishes that the quality of the product delivered is not good.</li>
+            <li><strong>Damaged or Defective Items:</strong> In case of receipt of damaged or defective items, please report to our customer service team within <strong>2 days</strong> of receipt of products. The request will be entertained once the seller/merchant has checked and determined the same.</li>
+            <li><strong>Product Not as Expected:</strong> If you feel that the product received is not as shown on the site or as per your expectations, you must bring it to the notice of our customer service within <strong>2 days</strong> of receiving the product.</li>
+            <li><strong>Warranty Items:</strong> In case of complaints regarding products that come with a warranty from manufacturers, please refer the issue to them directly.</li>
+            <li><strong>Refund Processing:</strong> In case of any refunds approved by 4Spire Global, it will take <strong>3 days</strong> for the refund to be processed to you.</li>
+          </ol>
+        </div>
+
+        <!-- Return Policy -->
+        <div id="policy-return" class="policy-panel">
+          <h3>Return Policy</h3>
+          <p>We offer refund/exchange within the first <strong>7 days</strong> from the date of your purchase. If 7 days have passed since your purchase, you will not be offered a return, exchange or refund of any kind.</p>
+          <h5>Eligibility for Return or Exchange</h5>
+          <p>In order to become eligible for a return or an exchange:</p>
+          <ul>
+            <li>The purchased item should be unused and in the same condition as you received it.</li>
+            <li>The item must have original packaging.</li>
+            <li>If the item was purchased on sale, it may not be eligible for a return/exchange.</li>
+            <li>Only items found defective or damaged are replaced based on an exchange request.</li>
+          </ul>
+          <p>There may be certain categories of products/items that are exempted from returns or refunds. Such categories will be identified to you at the time of purchase.</p>
+          <h5>Return Process</h5>
+          <p>For accepted return/exchange requests, once your returned product/item is received and inspected by us, we will send you an email to notify you about receipt of the returned/exchanged product. If approved after quality check, your request will be processed in accordance with our policies.</p>
+        </div>
+
+        <!-- Shipping Policy -->
+        <div id="policy-shipping" class="policy-panel">
+          <h3>Shipping Policy</h3>
+          <p>The orders for the user are shipped through registered domestic courier companies and/or speed post only.</p>
+          <ul>
+            <li>Orders are shipped within <strong>5 days</strong> from the date of the order and/or payment or as per the delivery date agreed at the time of order confirmation.</li>
+            <li>Platform Owner shall not be liable for any delay in delivery by the courier company/postal authority.</li>
+            <li>Delivery of all orders will be made to the address provided by the buyer at the time of purchase.</li>
+            <li>Delivery of our services will be confirmed on your email ID as specified at the time of registration.</li>
+            <li>If there are any shipping costs levied by the seller or the Platform Owner, the same are <strong>not refundable</strong>.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── Footer (same as index) ── -->
+    <footer class="container-fluid" id="gtco-footer">
+      <div class="row">
+        <div class="col-lg-6 footer" id="contact">
+          <h4>Contact Us</h4>
+          <input type="text" class="form-control" placeholder="Full Name" />
+          <input type="email" class="form-control" placeholder="Email Address" />
+          <textarea class="form-control" placeholder="Message"></textarea>
+          <div class="submit-button-container">
+            <a href="#" class="submit-button">SUBMIT<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="row">
+            <div class="col-6">
+              <h4>Company</h4>
+              <ul class="nav company-nav">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html#services">Services</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html#about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="Policies.html?tab=terms">Terms &amp; Conditions</a></li>
+                <li class="nav-item"><a class="nav-link" href="Policies.html?tab=privacy">Privacy Policy</a></li>
+                <li class="nav-item"><a class="nav-link" href="Policies.html?tab=refund">Refund Policy</a></li>
+                <li class="nav-item"><a class="nav-link" href="Policies.html?tab=shipping">Shipping Policy</a></li>
+              </ul>
+              <h4 class="mt-5">Follow Us</h4>
+              <ul class="nav follow-us-nav">
+                <li class="nav-item"><a class="nav-link pl-0" href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-google" aria-hidden="true"></i></a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+              </ul>
+            </div>
+            <div class="col-6">
+              <h4>Services</h4>
+              <ul class="nav flex-column services-nav">
+                <li class="nav-item"><a class="nav-link" href="#">Web Design</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Graphics Design</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">App Design</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">SEO</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Marketing</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Analytic</a></li>
+              </ul>
+              <p class="footer-text">All rights reserved</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <div class="whatsapp-div">
+      <a href="https://wa.me/918764666727" target="_blank">
+        <img src="images/whatsapp.png" alt="" class="whatsapp-logo" />
+      </a>
+    </div>
+
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+      function showPolicy(name) {
+        var policies = ['terms', 'privacy', 'refund', 'return', 'shipping'];
+        policies.forEach(function(p) {
+          var panel = document.getElementById('policy-' + p);
+          var btn   = document.getElementById('tab-' + p);
+          if (panel) panel.classList.toggle('active', p === name);
+          if (btn)   btn.classList.toggle('active',  p === name);
+        });
+        history.replaceState(null, '', 'Policies.' + name);
+      }
+
+      // On page load, check URL ?tab= param and open the right tab
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var tab = params.get('tab');
+        if (tab) showPolicy(tab);
+      })();
+    </script>
+  </body>
+</html>

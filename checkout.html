@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout | 4Spire Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 py-12">
+        <div class="mb-12">
+            <a href="marketplace.html" class="inline-flex items-center text-gray-500 hover:text-indigo-600 font-medium">
+                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                Back to Marketplace
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 bg-white p-8 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100" id="checkout-container">
+            <!-- Left: Form -->
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Guest Checkout</h1>
+                <p class="text-gray-500 mb-8">No account needed. Just fill in your details to receive your template.</p>
+                
+                <form id="checkout-form" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <input type="text" id="name" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="John Doe">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <input type="email" id="email" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="you@example.com">
+                    </div>
+                    <div class="p-4 bg-indigo-50 rounded-xl border border-indigo-100">
+                        <p class="text-xs text-indigo-700 font-medium leading-relaxed">By clicking the button below, you will place your order and the ZIP file will download automatically.</p>
+                    </div>
+                    <button type="submit" id="submit-btn" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-100 flex items-center justify-center gap-2">
+                        <span>Place Order & Download</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right: Item Detail -->
+            <div class="bg-gray-50 rounded-2xl p-8 border border-gray-100">
+                <h2 class="text-lg font-bold text-gray-900 mb-6">Order Summary</h2>
+                <div id="item-details" class="flex flex-col gap-6">
+                    <!-- Dynamic Item Details -->
+                </div>
+                <hr class="my-6 border-gray-200">
+                <div class="flex justify-between items-center text-xl font-bold">
+                    <span class="text-gray-900">Total Price</span>
+                    <span class="text-indigo-600" id="total-price">$0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success/Receipt View -->
+        <div id="success-view" class="hidden bg-white p-12 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 text-center">
+            <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="check" class="w-10 h-10"></i>
+            </div>
+            <h1 class="text-3xl font-extrabold text-gray-900 mb-2">Thank you for your order!</h1>
+            <p class="text-gray-500 text-lg mb-8" id="order-confirm-text">Your template is being downloaded now.</p>
+            
+            <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100 max-w-md mx-auto text-left mb-10">
+                <h3 class="font-bold text-gray-900 mb-4 text-sm uppercase tracking-wider">Purchase Receipt</h3>
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between"><span class="text-gray-500">Order ID:</span> <span id="receipt-id" class="font-mono">#0000</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Customer:</span> <span id="receipt-name">---</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Email:</span> <span id="receipt-email">---</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Template:</span> <span id="receipt-title" class="font-bold">---</span></div>
+                    <hr class="border-gray-200">
+                    <div class="flex justify-between font-bold text-base text-indigo-600"><span>Paid:</span> <span id="receipt-total">$0.00</span></div>
+                </div>
+            </div>
+            
+            <a href="marketplace.html" class="bg-gray-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-gray-800 transition">Return to Shop</a>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Get Template ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const templateId = urlParams.get('templateId');
+
+        if (!templateId) window.location.href = 'marketplace.html';
+
+        // Load Template Details (For checkout summary)
+        async function loadTemplate() {
+            try {
+                const response = await fetch('http://localhost:5000/api/templates');
+                const templates = await response.json();
+                const template = templates.find(t => t.id == templateId);
+
+                if (!template) {
+                     // Since public API only shows approved, fallback to alert
+                     alert("Template not found or not approved");
+                     window.location.href = 'marketplace.html';
+                     return;
+                }
+
+                document.getElementById('total-price').textContent = `$${template.price}`;
+                document.getElementById('item-details').innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <img src="${template.thumbnail.startsWith('http') ? template.thumbnail : 'http://localhost:5000/' + template.thumbnail}" class="w-20 h-14 object-cover rounded-lg border">
+                        <div>
+                            <h3 class="font-bold text-gray-900 text-lg">${template.title}</h3>
+                            <p class="text-sm text-gray-500">Lifetime Usage License</p>
+                        </div>
+                    </div>
+                `;
+            } catch (err) { console.error(err); }
+        }
+
+        document.getElementById('checkout-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submit-btn');
+            const originalContent = submitBtn.innerHTML;
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+
+            try {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Processing...</span>';
+                lucide.createIcons();
+
+                const response = await fetch('http://localhost:5000/api/orders/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        template_id: parseInt(templateId),
+                        customer_name: name,
+                        customer_email: email
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Show success view
+                    document.getElementById('checkout-container').classList.add('hidden');
+                    document.getElementById('success-view').classList.remove('hidden');
+
+                    // Fill receipt
+                    document.getElementById('receipt-id').textContent = `#${data.order.id}`;
+                    document.getElementById('receipt-name').textContent = data.order.customer_name;
+                    document.getElementById('receipt-email').textContent = data.order.customer_email;
+                    document.getElementById('receipt-title').textContent = data.template_title;
+                    document.getElementById('receipt-total').textContent = `$${data.order.total_price}`;
+
+                    // Trigger File Download
+                    const a = document.createElement('a');
+                    a.href = `http://localhost:5000/${data.file_url}`;
+                    a.download = `${data.template_title.replace(/\s/g, '_')}.zip`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+
+                } else {
+                    alert(data.message || "Order failed");
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalContent;
+                }
+            } catch (err) {
+                alert("Unable to connect to server");
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalContent;
+            }
+        });
+
+        loadTemplate();
+    </script>
+</body>
+</html>
