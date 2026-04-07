@@ -96,7 +96,7 @@
 
         async function fetchMyTemplates() {
             try {
-                const response = await fetch('http://localhost:5000/api/templates/my', {
+                const response = await fetch('/api/templates/my', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const templates = await response.json();
@@ -118,7 +118,7 @@
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
                             <div class="h-10 w-10 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                                <img src="${t.thumbnail.startsWith('http') ? t.thumbnail : 'http://localhost:5000/' + t.thumbnail}" class="h-full w-full object-cover">
+                                <img src="${t.thumbnail.startsWith('http') ? t.thumbnail : '/' + t.thumbnail}" class="h-full w-full object-cover">
                             </div>
                             <div class="ml-4">
                                 <div class="text-sm font-medium text-gray-900">${t.title}</div>
@@ -145,7 +145,7 @@
             const price = prompt("New Price:", oldPrice);
             if (title && price) {
                 try {
-                    const response = await fetch(`http://localhost:5000/api/templates/${id}`, {
+                    const response = await fetch(`/api/templates/${id}`, {
                         method: 'PUT',
                         headers: { 
                             'Content-Type': 'application/json',
@@ -161,7 +161,7 @@
         async function deleteTemplate(id) {
             if (confirm("Are you sure you want to delete this template?")) {
                 try {
-                    const response = await fetch(`http://localhost:5000/api/templates/${id}`, {
+                    const response = await fetch(`/api/templates/${id}`, {
                         method: 'DELETE',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -193,7 +193,7 @@
                 statusDiv.classList.remove('hidden', 'bg-green-100', 'bg-red-100');
                 statusDiv.classList.add('bg-indigo-50', 'text-indigo-700');
 
-                const response = await fetch('http://localhost:5000/api/templates', {
+                const response = await fetch('/api/templates', {
                     method: 'POST',
                     headers: { 'Authorization': `Bearer ${token}` },
                     body: formData

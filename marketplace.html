@@ -70,7 +70,7 @@
         // Fetch Approved Templates
         async function fetchTemplates() {
             try {
-                const response = await fetch('http://localhost:5000/api/templates');
+                const response = await fetch('/api/templates');
                 const templates = await response.json();
                 renderTemplates(templates);
             } catch (err) {
@@ -92,7 +92,7 @@
             grid.innerHTML = templates.map(t => `
                 <div class="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-indigo-200 hover:shadow-2xl hover:shadow-indigo-100 transition-all duration-300">
                     <div class="aspect-video bg-gray-100 relative overflow-hidden">
-                        <img src="${t.thumbnail.startsWith('http') ? t.thumbnail : 'http://localhost:5000/' + t.thumbnail}" 
+                        <img src="${t.thumbnail.startsWith('http') ? t.thumbnail : '/' + t.thumbnail}" 
                              alt="${t.title}" 
                              class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                              onerror="this.src='https://via.placeholder.com/800x450?text=No+Image'">

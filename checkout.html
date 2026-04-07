@@ -93,7 +93,7 @@
         // Load Template Details (For checkout summary)
         async function loadTemplate() {
             try {
-                const response = await fetch('http://localhost:5000/api/templates');
+                const response = await fetch('/api/templates');
                 const templates = await response.json();
                 const template = templates.find(t => t.id == templateId);
 
@@ -107,7 +107,7 @@
                 document.getElementById('total-price').textContent = `$${template.price}`;
                 document.getElementById('item-details').innerHTML = `
                     <div class="flex items-center gap-4">
-                        <img src="${template.thumbnail.startsWith('http') ? template.thumbnail : 'http://localhost:5000/' + template.thumbnail}" class="w-20 h-14 object-cover rounded-lg border">
+                        <img src="${template.thumbnail.startsWith('http') ? template.thumbnail : '/' + template.thumbnail}" class="w-20 h-14 object-cover rounded-lg border">
                         <div>
                             <h3 class="font-bold text-gray-900 text-lg">${template.title}</h3>
                             <p class="text-sm text-gray-500">Lifetime Usage License</p>
@@ -130,7 +130,7 @@
                 submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Processing...</span>';
                 lucide.createIcons();
 
-                const response = await fetch('http://localhost:5000/api/orders/checkout', {
+                const response = await fetch('/api/orders/checkout', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -156,7 +156,7 @@
 
                     // Trigger File Download
                     const a = document.createElement('a');
-                    a.href = `http://localhost:5000/${data.file_url}`;
+                    a.href = `/${data.file_url}`;
                     a.download = `${data.template_title.replace(/\s/g, '_')}.zip`;
                     document.body.appendChild(a);
                     a.click();

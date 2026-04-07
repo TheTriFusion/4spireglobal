@@ -58,7 +58,7 @@ app.get('/health', (req, res) => {
     res.json({ status: 'healthy', database: 'connected' });
 });
 
-app.listen(PORT, '127.0.0.1', () => {
-    console.log(`Server running on http://127.0.0.1:${PORT}`);
-    console.log(`Swagger Docs available at http://127.0.0.1:${PORT}/api-docs`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on http://0.0.0.0:${PORT}`);
+    console.log(`Swagger Docs available at http://0.0.0.0:${PORT}/api-docs`);
 });
