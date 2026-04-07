@@ -37,7 +37,11 @@ router.post('/signup', async (req, res) => {
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {
-        res.status(500).json({ message: "Registration failed or email already exists" });
+        console.error("Signup error:", err);
+        if (err.code === '23505') {
+            return res.status(400).json({ message: "Registration failed: Email already exists" });
+        }
+        res.status(500).json({ message: "Registration failed: An unexpected error occurred" });
     }
 });
 
